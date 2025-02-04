@@ -1,1 +1,0 @@
-# Skyline-Talent-Program---Smart-House
