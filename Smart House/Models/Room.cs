@@ -46,12 +46,40 @@ namespace Smart_House.Models
 
         public void RemoveDevice(Device device)
         {
+            if (device == null || !Devices.Contains(device))
+            {
+                Console.WriteLine("Cannot remove: Device not found in the room.");
+                return;
+            }
+
             Devices.Remove(device);
+            Console.WriteLine($"Device {device.Name} (ID: {device.Id}) has been removed from the {RoomType}.");
         }
 
         public void RemoveSensor(Sensor sensor)
         {
+            if (sensor == null || !Sensors.Contains(sensor))
+            {
+                Console.WriteLine("Cannot remove: Sensor not found in the room.");
+                return;
+            }
+
             Sensors.Remove(sensor);
+            Console.WriteLine($"Sensor {sensor.Name} (ID: {sensor.Id}) has been removed from the {RoomType}.");
+        }
+
+        public void ShowRoomContents()
+        {
+            Console.WriteLine($"Contents of { RoomType}:");
+            Console.WriteLine("   -Devices:");
+            foreach (Device device in Devices) {
+                Console.WriteLine(device.Name+", "+device.Id);
+            }
+            Console.WriteLine("    -Sensors");
+            foreach (Sensor sensor in Sensors)
+            {
+                Console.WriteLine(sensor.Name + ", " + sensor.Id);
+            }
         }
     }
 }

@@ -15,7 +15,19 @@ namespace Smart_House.Sensors
                 throw new ArgumentException("Temperature value must be between -50 and 50.");
             }
         }
-        public override string status()
+
+        public override void UpdateValue(double newValue)
+        {
+            if (newValue < -50 || newValue > 50)
+            {
+                Console.WriteLine("Temperature out of valid range (-50 to 50°C). Update rejected.");
+                return;
+            }
+
+            base.UpdateValue(newValue);
+            Console.WriteLine($"Temperature updated: {Value}°C.");
+        }
+        public override string Status()
         {
             return $"Temperature sensor {Id} reads currently {Value} °C.";
         }

@@ -15,9 +15,28 @@ namespace Smart_House.Sensors
                 throw new ArgumentException("Smoke value must be between 0 and 100.");
             }
         }
-        public override string status()
+
+        public override void UpdateValue(double newValue)
         {
-            return $"Smoke sensor {Id} reads currently {Value} %.";
+            if (newValue < 0 || newValue > 100)
+            {
+                Console.WriteLine("❌ Invalid smoke level. Must be between 0 and 100.");
+                return;
+            }
+
+            base.UpdateValue(newValue);
+        }
+        public override string Status()
+        {
+            if(Value >= 50)
+            {
+                Console.WriteLine("🚨 CRITICAL SMOKE LEVEL!");
+            }
+            else if (Value >= 30)
+            {
+                Console.WriteLine("WARNING LEVEL!");
+            }
+            return $"Smoke sensor {Id} reads currently {Value}.";
         }
     }
 }

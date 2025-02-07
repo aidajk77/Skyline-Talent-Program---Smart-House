@@ -1,4 +1,5 @@
-﻿using Smart_House.Models;
+﻿using Smart_House.Enums;
+using Smart_House.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Smart_House.Devices
     {
         public string Id { get; private set; }
         public string Address { get; set; }
-        public List<Room> Rooms { get; set; }
+        public List<Room> Rooms { get; private set; }
         public SmartHouse(string id, string address, List<Room> rooms) : this(id, address)
         {
             Rooms = rooms;
@@ -26,10 +27,47 @@ namespace Smart_House.Devices
         public void AddRoom(Room room)
         {
             Rooms.Add(room);
+            Console.WriteLine($"Room {room.RoomType} has been added to the house.");
         }
         public void RemoveRoom(Room room)
         {
+            if (room == null || !Rooms.Contains(room))
+            {
+                Console.WriteLine("Cannot remove: Room not found.");
+                return;
+            }
+
             Rooms.Remove(room);
+            Console.WriteLine($"{room.RoomType} has been removed from the house.");
+        }
+        public Room FindRoom(RoomType type)
+        {
+            foreach (var room in Rooms)
+            {
+                if (room.RoomType == type)
+                {
+                    return room;
+                }
+            }
+            return null;
+        }
+        public int GetTotalDevices()
+        {
+            int totalDevices = 0;
+            foreach (var room in Rooms)
+            {
+                totalDevices += room.Devices.Count;
+            }
+            return totalDevices;
+        }
+        public int GetTotalSensors()
+        {
+            int totalSensors = 0;
+            foreach (var room in Rooms)
+            {
+                totalSensors += room.Sensors.Count;
+            }
+            return totalSensors;
         }
         public void DisplayHouseInfo()
         {

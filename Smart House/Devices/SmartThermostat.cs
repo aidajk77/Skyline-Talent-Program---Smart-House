@@ -10,7 +10,7 @@ namespace Smart_House.Devices
 {
     internal class SmartThermostat : Device
     {
-        public TemperatureSensor TemperatureSensor { get; set; }
+        public TemperatureSensor TemperatureSensor { get; private set; }
         public int TargetSensorValue { get; set; }
         
         public SmartThermostat(string name,string id, TemperatureSensor temperatureSensor, int targetSensorValue) : base(name,id)
@@ -18,24 +18,43 @@ namespace Smart_House.Devices
             TemperatureSensor = temperatureSensor;
             TargetSensorValue = targetSensorValue;
         }
+
+        public void SetTargetTemperature(int targetTemperature)
+        {
+            if (!IsActive)
+            {
+                Console.WriteLine("Thermostat is OFF. Cannot set target temperature.");
+                return;
+            }
+            TargetSensorValue = targetTemperature;
+            Console.WriteLine($"Target temperature set to {TargetSensorValue}°C.");
+        }
         public void AdjustTemperature()
         {
-            if (TemperatureSensor.Value < TargetSensorValue)
-            { 
-                Console.WriteLine($"Temperature is {(int)TemperatureSensor.Value}°C. Turning on the heating.");
-                TemperatureSensor.Value += 1;
-
-            }
-            else if (TemperatureSensor.Value > TargetSensorValue)
+            if (!IsActive)
             {
-                Console.WriteLine($"Temperature is {(int)TemperatureSensor.Value}°C. Turning on the cooling.");
-                TemperatureSensor.Value -=1;
+                Console.WriteLine("Thermostat is OFF. Cannot adjust temperature.");
+                return;
+            }
+
+            int currentTemp = (int)TemperatureSensor.Value;
+
+            if (currentTemp < TargetSensorValue)
+            {
+                Console.WriteLine($"Temperature is {currentTemp}°C. Turning on the heating.");
+                TemperatureSensor.UpdateValue(currentTemp + 1);
+            }
+            else if (currentTemp > TargetSensorValue)
+            {
+                Console.WriteLine($"Temperature is {currentTemp}°C. Turning on the cooling.");
+                TemperatureSensor.UpdateValue(currentTemp - 1);
             }
             else
             {
-                Console.WriteLine($"Temperature is {(int)TemperatureSensor.Value}°C. The temperature is optimal.");
+                Console.WriteLine($"Temperature is {currentTemp}°C. The temperature is optimal.");
             }
         }
+
 
 
     }

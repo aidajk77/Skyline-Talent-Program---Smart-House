@@ -8,9 +8,9 @@ namespace Smart_House.Sensors
 {
     internal abstract class Sensor 
     {
-        public string Name { get; set; }
-        public string Id { get; set; }
-        public double Value { get; set; }
+        public string Name { get; private set; }
+        public string Id { get; private set; }
+        public double Value { get; private set; }
 
         public Sensor(string name,string id, double value)
         {
@@ -19,7 +19,13 @@ namespace Smart_House.Sensors
             Value = value;
         }
 
-        public virtual string status()
+        public virtual void UpdateValue(double newValue)
+        {
+            Value = newValue;
+            Console.WriteLine($"{Name} (ID: {Id}) updated value: {Value}");
+        }
+
+        public virtual string Status()
         {
             return $"Sensor {Name} with ID {Id} reads currently {Value}.";
         }
